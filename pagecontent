@@ -1,0 +1,59 @@
+#!/usr/bin/php
+<?php
+$xml=simplexml_load_file($argv[1]);
+findtext($xml->body->children(),'');
+
+function findtext($arr,$path='') {
+	// print "-----------------------\n";
+	// print_r($arr);
+	// print "-----------------------\n";
+	// if (!is_object($arr) && !is_array($arr)) {
+	// 	print "WTF is it?\n";
+	// 	// print_r($arr);
+	// 	if (strlen($arr))
+	// 		print "$arr\n";
+	// 	return;
+	// }
+		
+	foreach ($arr as $k=>$v) {
+		$name=$k;
+
+		switch ($name) {
+			case "a":
+			case "h1":
+			case "h2":
+			case "h3":
+			case "h4":
+			case "p":
+			case "i":
+			case "b":
+			case "div":
+			case "span":
+			case "center":
+				$text=(string)$v;
+				if (strlen(trim($text))) {
+					$text=preg_replace('/\s+/',' ',$text);
+					print $path.'/'.$name." $text\n";
+					// print $name."=$text\n";
+					// print substr($text,0,7)."\n";
+					// if (substr($text,0,7) == "Griffin") {
+						// print "found it: \n";
+						// print_r((string)$v);
+					// }
+				}
+				break;
+			default:
+				break;
+		}
+		
+		if ($v instanceof SimpleXMLElement) {
+			if (count($v->count())) {
+				findtext($v->children(),$path.'/'.$name);
+			}
+			else
+				findtext(get_object_vars($v),$path.'/'.$name);
+		}
+	}
+}
+
+?>

@@ -1,0 +1,30 @@
+#!/usr/bin/php
+<?php
+
+$last_path=array();
+
+$f=fopen("php://stdin",'r');
+if ($f) {
+	while ($line=fgets($f)) {
+		rtrim($line);
+		list($htmlpath,$text)=preg_split("/\s+/",$line,2);
+		print $htmlpath."\n";
+		$tags=preg_split(':/:',$htmlpath,null,PREG_SPLIT_NO_EMPTY);
+		
+		// Terminate tags
+		while (count($last_path) && (count($tags) <= count($last_path))) {
+			print '</'.array_pop($last_path).'>';
+		}
+
+		// Add new tags
+		$extra_tags=array_diff($tags,$last_path);
+		if (count($extra_tags))
+			print '<'.join('><',$extra_tags).'>';
+		print $text;
+
+		$last_path=$tags;
+	}
+	fclose($f);
+}
+
+?>

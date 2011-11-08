@@ -1,0 +1,5 @@
+http://mac.finerthingsin.com/	//div[contains(@class,&quot;post&quot;)]
+http://www.ilounge.com/	//div[contains(@class,&quot;story&quot;)]/p
+http://www.loopinsight.com/	//div[contains(@class,&quot;grid_11&quot;)]
+http://www.macworld.com/	//div[contains(@class,&quot;articleText&quot;)]
+http://blog.agile.ws/	//div[contains(@class,&quot;entry-content&quot;)]
