@@ -17,16 +17,11 @@
 	<xsl:template match="//*">
 		<xsl:call-template name="print-path"/>
 		<xsl:text> </xsl:text>
-		<xsl:for-each select="*">
-			<xsl:text>CHILD</xsl:text>
-			<xsl:if test="text()">
-				<xsl:value-of select="./text()"/>
-			</xsl:if>
-			<xsl:if test="not(text())">
-				<xsl:text>&#10;</xsl:text>
-				<xsl:apply-templates select="."/>
-			</xsl:if>
-		</xsl:for-each>
+		<xsl:if test="text() and string-length(normalize-space(./text())) &gt; 0">
+			<xsl:value-of select="string-length(normalize-space(./text()))"/>
+		</xsl:if>
+		<xsl:text>&#10;</xsl:text>
+		<xsl:apply-templates select="*"/>
 	</xsl:template>
 
 	<xsl:template name="print-path">
