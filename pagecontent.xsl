@@ -19,8 +19,8 @@
 		<xsl:text> </xsl:text>
 
 		<xsl:variable name="total">
-			<xsl:call-template name="sum-text-nodes">
-				 <xsl:with-param name="kids" select="*"/>
+			<xsl:call-template name="total-text-length">
+				 <xsl:with-param name="nodes" select="descendant::*[text()]"/>
 			</xsl:call-template>
 		</xsl:variable>
 		
@@ -30,19 +30,21 @@
 		<xsl:apply-templates select="*"/>
 	</xsl:template>
 
-	<xsl:template name="sum-text-nodes">
-		<xsl:param name="kids"/>
+
+	<xsl:template name="total-text-length">
+		<xsl:param name="nodes"/>
 		<xsl:choose>
-			<xsl:when test="count($kids) > 1">
+			<xsl:when test="count($nodes) > 1">
 				<xsl:variable name="result">
-					<xsl:call-template name="sum-text-nodes">
-						<xsl:with-param name="kids" select="$kids[position() > 1]"/>
+					<xsl:call-template name="total-text-length">
+						<xsl:with-param name="nodes" select="$nodes[position() > 1]"/>
 					</xsl:call-template>
 				</xsl:variable>
-				<xsl:value-of select="string-length(normalize-space($kids[1]/text())) + $result"/>
+				<xsl:value-of select="string-length(normalize-space($nodes[1]/text())) + $result"/>
 			</xsl:when>
 			<xsl:otherwise>
-				<xsl:value-of select="string-length(normalize-space($kids[1]/text()))"/>
+				<xsl:variable name="result" select="0"/>
+				<xsl:value-of select="string-length(normalize-space($nodes[1]/text()))"/>
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
