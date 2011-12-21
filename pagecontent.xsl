@@ -56,8 +56,13 @@
 	</xsl:template>
 	
 	<xsl:template name="print-step">
+		<xsl:variable name="name" select="name()"/>
 		<xsl:text>/</xsl:text>
 		<xsl:value-of select="name()"/>
+		<xsl:text>[</xsl:text>
+		<xsl:value-of select="1+count(preceding-sibling::*[name()=$name])"/>
+		<xsl:text>]</xsl:text>
     </xsl:template>
+
 
 </xsl:stylesheet>

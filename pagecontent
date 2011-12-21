@@ -1,9 +1,10 @@
 #!/usr/bin/php
 <?php
 $xml=simplexml_load_file($argv[1]);
-findtext($xml->body->children(),'');
+// findtext($xml->body->children(),'');
+findtext($xml);
 
-function findtext($arr,$path='') {
+function findtext($arr,$path=array()) {
 	// print "-----------------------\n";
 	// print_r($arr);
 	// print "-----------------------\n";
@@ -24,16 +25,27 @@ function findtext($arr,$path='') {
 			case "h2":
 			case "h3":
 			case "h4":
+			case "h5":
+			case "h6":
+			case "ol":
+			case "ul":
+			case "li":
 			case "p":
 			case "i":
+			case "em":
+			case "strong":
+			case "small":
 			case "b":
 			case "div":
 			case "span":
 			case "center":
+				print '/'.join($path,'/').'/'.$name;
+				
 				$text=(string)$v;
+				$text=preg_replace('/\s+/',' ',$text);
 				if (strlen(trim($text))) {
-					$text=preg_replace('/\s+/',' ',$text);
-					print $path.'/'.$name." $text\n";
+					// print " ".str_repeat("*",strlen($text)/10);
+					print " ".$text;
 					// print $name."=$text\n";
 					// print substr($text,0,7)."\n";
 					// if (substr($text,0,7) == "Griffin") {
@@ -41,17 +53,20 @@ function findtext($arr,$path='') {
 						// print_r((string)$v);
 					// }
 				}
+
+				print "\n";
 				break;
 			default:
+				// print "??? $name\n";
 				break;
 		}
 		
 		if ($v instanceof SimpleXMLElement) {
 			if (count($v->count())) {
-				findtext($v->children(),$path.'/'.$name);
+				findtext($v->children(),array_merge($path,array($name)));
 			}
 			else
-				findtext(get_object_vars($v),$path.'/'.$name);
+				findtext(get_object_vars($v),array_merge($path,array($name)));
 		}
 	}
 }
